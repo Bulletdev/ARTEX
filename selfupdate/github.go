@@ -13,7 +13,7 @@ import (
 
 // Repo 是发布源。写死而不是做成配置项：更新源可配等于给任何能改配置的人一条
 // 远程代码执行通道，对一个渗透测试平台来说这个口子开不得。
-const Repo = "Hinln/ARTEX"
+const Repo = "Bulletdev/ARTEX"
 
 // GitHubTokenEnv 只由后端进程读取，不通过前端或配置 API 传递令牌。
 const GitHubTokenEnv = "ARTEX_UPDATE_GITHUB_TOKEN"
@@ -143,7 +143,7 @@ func FetchLatest(ctx context.Context, c *http.Client) (*Release, error) {
 	case resp.StatusCode == http.StatusTooManyRequests:
 		return nil, fmt.Errorf("GitHub 接口限流，请稍后再试")
 	case resp.StatusCode == http.StatusNotFound:
-		return nil, fmt.Errorf("仓库 %s 不可访问或尚未发布正式版本；私有仓库请在后端设置 %s（需 Contents 读取权限）", Repo, GitHubTokenEnv)
+		return nil, fmt.Errorf("仓库 %s 不可访问或尚未发布正式版本；如遇限流可在后端设置 %s（需 Contents 读取权限）", Repo, GitHubTokenEnv)
 	case resp.StatusCode != http.StatusOK:
 		return nil, fmt.Errorf("GitHub 返回 %d", resp.StatusCode)
 	}
